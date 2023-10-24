@@ -1,0 +1,12 @@
+Libro n.1
+Titolo: dfg
+Numero pagine: 33
+Autore: fdgdf
+Editore: dfg
+ 
+Libro n.2
+Titolo: sdfsd
+Numero pagine: 3
+Autore: sdfgs
+Editore: dfsg
+ 

@@ -1,5 +1,9 @@
 package org.lessons.java.exceptions;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -92,10 +96,72 @@ public class Main {
         // Chiudo lo scanner da tastiera
         scan.close();
 
-        //Stampo info ogni libro
+        // Stampo info ogni libro
         for (Libro singolo_libro : libri) {
             System.out.println(singolo_libro);
             System.out.println("-------------");
+        }
+
+        // Setto il workingDir nella mia directory (quindi a ./)
+        File workingDir = new File(".");
+        // Stampo se la workingDir esiste ed è stata settata
+        System.out.println(workingDir.exists());
+        // Se esiste ed è settata
+        if (workingDir.exists() && workingDir.isDirectory()) {
+            // Salvo nell'array files la lista delle cartelle/file della directory
+            String[] files = workingDir.list();
+            // Stampo nome di ogni cartella/file
+            for (String name : files) {
+                System.out.println(name);
+            }
+        }
+
+        // Inizializzo a null il FileWriter
+        FileWriter fileWriter = null;
+        try {
+            // Provo ad aprirlo
+            fileWriter = new FileWriter("./resources/data.txt");
+            // Provo a scriverci sopra
+            for (int i = 0; i < libri.length; i++) {
+                fileWriter.write("Libro n." + (i + 1));
+                fileWriter.write("\nTitolo: " + libri[i].getTitolo());
+                fileWriter.write("\nNumero pagine: " + libri[i].getNumero_pagine());
+                fileWriter.write("\nAutore: " + libri[i].getAutore());
+                fileWriter.write("\nEditore: " + libri[i].getEditore() + "\n \n");
+            }
+        } // Se si solleva un'eccezione passo dal catch
+        catch (IOException e) {
+            System.out.println("Impossibile scrivere sul file.");
+        } // Sia che ho terminato il try, sia che sono entrato nel catch passo di qui
+        finally {
+            try {
+                // Se il fileWriter è diverso da null, lo chiudo
+                if (fileWriter != null) {
+                    System.out.println("Chiudo il file.");
+                    fileWriter.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Provo a leggere il file
+        Scanner fileReader = null;
+        try {
+            // Setto file da leggere
+            fileReader = new Scanner(new File("./resources/data.txt"));
+            // Creo loop finchè viene trovata una nuova riga
+            while (fileReader.hasNextLine()) {
+                // Stampo riga
+                String line = fileReader.nextLine();
+                System.out.println(line);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File non trovato.");
+        } finally {
+            if (fileReader != null) {
+                fileReader.close();
+            }
         }
     }
 }
